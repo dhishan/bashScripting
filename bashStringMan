@@ -1,0 +1,12 @@
+#! /bin/bash
+
+filename="string.txt"
+extension="txt"
+echo ${#filename}
+echo ${filename%.${extension}}
+echo ${filename%.*}
+echo ${filename/%.*/.tmp}
+
+pathname=/a/v/c/d
+echo ${pathname##*/}
+echo ${pathname/*\//}

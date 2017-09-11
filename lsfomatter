@@ -1,0 +1,6 @@
+#!/bin/bash
+echo Here is your formatted output
+echo =============================
+echo
+cat /dev/stdin | sed -e '/^total/d' | sed -E 's/([A-Za-z]+)/&/p'
+# -E '/([A-Za-z]+)/p'

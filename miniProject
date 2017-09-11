@@ -1,0 +1,31 @@
+#! /bin/bash
+
+. myfunctions
+
+read -p '$ ' cmd args
+# echo $args | awk '{print $1}'
+# test ${#args} -ge 1
+# echo $?
+# if [ ${#args} -ge 1 ]
+        # then
+          # echo username is ${args%% *}
+          # echo username is `echo $args | awk '{print $1}'`
+        # fi
+
+case "$cmd" in
+  proc) if [ ${#args} -ge 1 ]
+        then echo username is `echo $args | awk '{print $1}'`
+          ps -u `echo $args | awk '{print $1}'`
+        else
+          read -p "invalid username try again" args
+        fi
+        ;;
+  die)  killme $args
+        ;;
+  tree) for i in $(ls -F -1 | grep "/$" | sed "s/\///")
+        do
+          echo `ls -F1 $i`
+        done
+
+
+esac

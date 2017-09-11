@@ -1,0 +1,19 @@
+#! /bin/bash
+
+killme(){
+  result=`ps | grep -v "grep" | grep $1 | wc -l`
+        if [ $result -gt 1 ]
+        then
+          ps | grep -v "grep" | grep $1 | awk '{ print NR " --> " $0 }'
+          read -p "Enter the option " option
+          psid=`ps | grep -v "grep" | grep $1 | sed -n "$option"p | cut -d " " -f1`
+          kill $psid
+          echo killed $psid
+        elif [ $result -eq 1 ]
+        then
+          kill `ps | grep -v "grep" | grep $1 | cut -d " " -f1`
+        else
+          echo no such process
+        fi
+        return 0
+}

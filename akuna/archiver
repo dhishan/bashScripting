@@ -1,0 +1,54 @@
+#!/usr/bin/python
+from __future__ import print_function
+import sys
+from os import path, mkdir, listdir
+from datetime import datetime, timedelta
+from shutil import move
+import re
+
+if len(sys.argv) != 3:
+    print('Usage: ./archiver <input_folder> <output_folder>')
+    sys.exit()
+
+input_folder = sys.argv[1]
+output_folder = sys.argv[2]
+
+try:
+    assert path.isdir(input_folder)
+except AssertionError as e:
+    print("Folder \'{0}\' does not exist".format(input_folder))
+    sys.exit()
+
+try:
+    assert path.isdir(output_folder)
+except AssertionError as e:
+    print(e)
+    sys.exit()
+
+
+def _isolder(f_date):
+    if (datetime.now() - f_date).days > 30:
+        return True
+    return False
+
+
+def _extractdate(f_name):
+    if not hasattr(_extractdate,"name_pattern"):
+        _extractdate.name_pattern = re.compile('^(\d{4})(\d{2})(\d{2})-[\w -.]+.log$')
+    fdate = _extractdate.name_pattern.match(f_name)
+    if fdate:
+        return datetime(int(fdate.group(1)),int(fdate.group(2)),int(fdate.group(3)))
+    return None
+
+
+try:
+    files = listdir(input_folder)
+    for l_file in files:
+        dateobj = _extractdate(l_file)
+        if dateobj and _isolder(dateobj):
+            f_fullpath = path.join(input_folder,l_file)
+            f_newpath = path.join(output_folder,l_file)
+            move(f_fullpath,f_newpath)
+except Exception as e:
+    print(e)
+    sys.exit()

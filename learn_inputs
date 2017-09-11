@@ -1,0 +1,12 @@
+#!/bin/bash
+# cat /dev/stdin | sed -ne '2p'
+while read var; do
+  # echo $var
+  user_nsys=$(echo $var | cut -d: -f1)
+  ps_cnt=$(ps -u $user_nsys | wc -w)
+  echo "$ps_cnt $user_nsys"
+  # user_sys=$(awk -v var="$var" -F: '{print $1}')
+  # echo $user_sys
+  # echo $var
+  # echo
+done < <(cat /etc/passwd | sed -E '/^#/d' | grep '/bin/bash')
